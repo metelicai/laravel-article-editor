@@ -1,0 +1,29 @@
+.footer {
+	@extend .spacing-footer;
+	display: flex;
+	justify-content: space-between;
+	gap: 32rem;
+
+	@include phone {
+		flex-direction: column;
+		gap: 16rem;
+	}
+
+	&__company {
+		color: $h;
+	}
+
+	&__developers {
+		display: flex;
+		flex-wrap: nowrap;
+
+		&-logo img {
+			width: 48rem;
+			height: 48rem;
+			margin-right: 8rem;
+		}
+
+		// &-text {}
+	}
+
+}

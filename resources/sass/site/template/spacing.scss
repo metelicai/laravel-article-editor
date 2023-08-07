@@ -1,0 +1,29 @@
+// Добавляет отступы (padding) до контента в зависимости от медиа-выражения
+.spacing {
+	&-default {
+		@include spacing((w: 72rem 240rem,
+				l: 72rem 80rem,
+				t: 72rem 32rem,
+				p: 48rem 16rem));
+	}
+
+	&-header {
+		@include spacing((w: 20rem 64rem,
+				l: 24rem 48rem,
+				t: 16rem 32rem,
+				p: 16rem));
+	}
+
+	&-footer {
+		@include spacing((null: 16rem 40rem,
+				p: 16rem));
+	}
+
+
+	&-article {
+		@include spacing((w: 80rem 0,
+				l: 80rem 0,
+				t: 64rem 0,
+				p: 48rem 0));
+	}
+}

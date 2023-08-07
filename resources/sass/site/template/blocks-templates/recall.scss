@@ -1,0 +1,19 @@
+.recall-template {
+	@extend .spacing-default;
+
+	.recall {
+		&__title {
+			margin-bottom: 16rem;
+		}
+
+		&__description {
+			@include grid(1);
+			@include gap(24);
+			margin-bottom: 24rem;
+		}
+
+		&__button {
+			margin-top: 24rem;
+		}
+	}
+}

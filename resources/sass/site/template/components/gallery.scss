@@ -1,0 +1,25 @@
+@import '~baguettebox.js';
+
+.gallery {
+	@include grid(6, d);
+	@include grid(4, t);
+	@include grid(2, p);
+	@include gap(16 8);
+
+	&__link {
+		text-decoration: none;
+
+		&:hover {
+			img {
+				transform: scale(1.05);
+			}
+		}
+	}
+
+	&__image {
+		width: 100%;
+		object-fit: cover;
+		vertical-align: middle;
+		transition: .3s;
+	}
+}

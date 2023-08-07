@@ -1,0 +1,74 @@
+@import '~swiper/css';
+@import '~swiper/css/navigation';
+@import '~swiper/css/pagination';
+
+.swiper-slider {
+	position: relative;
+
+	.swiper {
+		position: relative;
+
+		.swiper-slide {
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center center;
+				vertical-align: middle;
+			}
+		}
+
+		&:not(.swiper-initialized),
+		.swiper-navigation-disabled {
+
+			.swiper-arrows,
+			.swiper-pagination {
+				display: none;
+			}
+		}
+
+
+		// ARROWS
+		.swiper-arrows {
+			position: absolute;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.swiper-button-prev,
+			.swiper-button-next {
+				@extend .icon;
+				--swiper-navigation-size: 0;
+				position: initial;
+				box-sizing: border-box;
+				overflow: hidden;
+				transition: .2s;
+
+				&::before {
+					transition: .2s;
+				}
+			}
+		}
+
+
+		// PAGINATION
+		.swiper-pagination {
+			position: absolute;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&-fraction {
+				width: max-content;
+				margin: 0 auto;
+				left: 0;
+				right: 0;
+
+				&.swiper-pagination-lock {
+					display: none;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+/*
+ * Меняет позицию элемента в блоках flex и grid
+ * Возможные варианты переменной $mq берутся из миксина mqs
+ *
+ * Пример: @include order(4) — поставит элемент 4-м
+ * Пример: @include order(4, t) — поставит элемент 4-м на планшетах
+ */
+@mixin order($value, $mq: null) {
+	@include mqs($mq) {
+		order: strip-units($value);
+	}
+}

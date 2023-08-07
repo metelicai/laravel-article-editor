@@ -1,0 +1,33 @@
+.link {
+	text-decoration: none;
+	line-height: 24rem;
+	transition: color .2s;
+
+	&_icon {
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+
+		.icon + span,
+		span + .icon {
+			margin-left: 8rem;
+		}
+	}
+
+	// Variants
+	&_primary {
+		color: $primary;
+
+		&:hover {
+			color: $primary-light;
+		}
+
+		&.link_icon {
+
+			.icon:last-child,
+			.icon:first-child {
+				color: $gray3;
+			}
+		}
+	}
+}

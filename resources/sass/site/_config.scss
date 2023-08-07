@@ -1,0 +1,59 @@
+/*
+ * Конфигурация оформления
+ */
+
+// inter
+@font-face {
+	font-family: 'Inter';
+	src: local('Inter Regular'),
+		url('/fonts/font/inter/Inter-Regular.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Inter';
+	src: local('Inter Semi Bold'),
+		url('/fonts/font/inter/Inter-SemiBold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Inter';
+	src: local('Inter Bold'),
+		url('/fonts/font/inter/Inter-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+}
+
+$headings-font: 'Inter', sans-serif;
+$common-font: 'Inter', sans-serif;
+
+/* Цветовая палитра */
+$primary: #E71F1F;
+$primary-light: #E76868;
+$primary-dark: #A61D1D;
+
+$secondary: #D1D6E0;
+$secondary-light: #85A6EF;
+$secondary-dark: #2C58B8;
+
+$bg: #F4F4F4;
+
+$w: white;
+$gray1: #eeeeee;
+$gray2: #d3d3d3;
+$gray3: #bbbbbb;
+$gray4: #999999;
+$gray5: #666666;
+$gray6: #222222;
+$b : black;
+
+$h : #262525;
+$ink : #3D3D3D;
+$hint : #999999;
+
+$transition: .2s;
+
+$error : #EF4F4F;

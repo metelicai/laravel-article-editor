@@ -1,0 +1,9 @@
+@import 'bootstrap';
+
+.nav-link {
+	color: var(--bs-link-color);
+
+	&:hover {
+		color: var(--bs-link-hover-color);
+	}
+}

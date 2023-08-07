@@ -1,0 +1,6 @@
+@use 'sass:math';
+
+// обрезает единицы измерения
+@function strip-units($number) {
+	@return math.div($number, $number * 0 + 1);
+}

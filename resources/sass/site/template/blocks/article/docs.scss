@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+.docs {
+	margin: 32rem 0;
+
+
+	&__grid {
+		@include grid-responsive;
+		@include gap(16 8);
+	}
+
+	&__block {}
+
+	&__link {
+		display        : flex;
+		text-decoration: none;
+
+		@include col(4);
+
+		&:hover {
+			.docs__head {
+				color: $primary;
+			}
+		}
+	}
+
+	.icon {
+		margin-right: 8rem;
+		margin-top  : 4rem;
+
+		&:before {
+			font-size: 32rem;
+		}
+	}
+
+	&__head {
+		text-decoration: underline;
+		font-size      : 16rem;
+		line-height    : 24rem;
+		color          : $h;
+		transition     : all 0.3s;
+	}
+
+	&__hint {
+		display    : block;
+		font-size  : 12rem;
+		line-height: 20rem;
+		color      : $ink;
+	}
+}
+
+.article .docs {
+	margin-top   : 32rem;
+	margin-bottom: 32rem;
+
+	.docs__head {
+		text-decoration   : none;
+		font-weight       : 500;
+		// color          : #F3F3F3
+	}
+
+	.docs__hint {
+		// color: #B2B2B2;
+	}
+}

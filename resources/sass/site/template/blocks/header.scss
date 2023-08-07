@@ -1,0 +1,188 @@
+.header {
+	@extend .spacing-header;
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	transition: .5s;
+
+	&::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		backdrop-filter: blur(16rem);
+		opacity: 0;
+		z-index: -1;
+		transition: .3s;
+	}
+
+	@include mobile {
+		align-items: center;
+	}
+
+	&_scrolled {
+		background-color: transparentize(#FFFFFF, $amount: 0.8);
+
+		&::before {
+			opacity: 1;
+		}
+	}
+
+	&__logo {
+		height: 70rem;
+		vertical-align: middle;
+
+		@include phone {
+			width: 48rem;
+		}
+	}
+}
+
+// Общие стили для меню и в шапке и в модалке
+// Разделение стилей для меню и шапки ниже
+.menu {
+	display: flex;
+	align-items: center;
+	width: 100%;
+
+	&__nav {
+		flex-grow: 1;
+		margin: 0 96rem;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8rem 24rem;
+
+		@include mqs(l t) {
+			flex-wrap: wrap;
+			gap: 16rem 24rem;
+		}
+
+		@include laptop {
+			margin: 0 40rem;
+		}
+
+		@include phone {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 24rem;
+		}
+
+		.item {
+			@extend .font-semi-bold;
+			font-size: 16rem;
+			line-height: 24rem;
+			white-space: nowrap;
+			text-decoration: none;
+
+			display: flex;
+			align-items: center;
+			flex-wrap: nowrap;
+			transition: $transition;
+
+			color: $h;
+
+			&:not(.item_active):hover {
+				color: $primary;
+			}
+
+			&_active {
+				cursor: default;
+				pointer-events: none;
+				opacity: 0.5;
+			}
+		}
+	}
+
+	&__buttons {
+		display: flex;
+		gap: 16rem;
+
+		@include mobile {
+			margin-left: auto;
+		}
+	}
+
+	&__mobile-menu {
+		@extend .font-bold;
+		display: flex;
+		align-items: center;
+		color: $h;
+		font-size: 16rem;
+		line-height: 24rem;
+
+		@include desktop {
+			display: none;
+		}
+
+		.icon {
+			color: $primary;
+		}
+
+		&:hover {
+
+			&,
+			.icon {
+				color: $primary-light !important;
+			}
+		}
+	}
+}
+
+// Стили для меню в шапке
+.header__menu {
+	display: flex;
+	flex-grow: 1;
+
+	.menu {
+		@include mobile {
+
+			.menu__nav,
+			.menu__contacts {
+				display: none !important;
+				visibility: hidden !important;
+			}
+		}
+	}
+}
+
+// Стили для меню в модалке
+.modal_menu {
+	.modal-container {
+		@include phone {
+			width: 100%;
+		}
+	}
+
+	.menu {
+		flex-direction: column;
+		align-items: flex-start;
+
+		&__nav {
+			margin: 0;
+
+		}
+
+		&__mobile-menu {
+			display: none;
+		}
+
+		&__buttons {
+			flex-direction: column;
+			margin-top: 48rem;
+			margin-left: 0;
+			width: 100%;
+
+			@include phone {
+				margin-top: 40rem;
+			}
+		}
+	}
+}

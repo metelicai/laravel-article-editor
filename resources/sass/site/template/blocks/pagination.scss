@@ -1,0 +1,55 @@
+.pagination {
+	display: flex;
+	align-items: center;
+	width: 100%;
+
+	&__page {
+		@extend .p;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40rem;
+		min-width: 40rem;
+		padding: 8rem 16rem;
+		cursor: default;
+		text-decoration: none;
+		color: $gray3;
+		transition: $transition;
+
+		@include phone {
+			min-width: 30rem;
+		}
+
+		&_current {
+			background-color: $primary;
+			color: $w !important;
+		}
+
+		&_link {
+			color: $h;
+			cursor: pointer;
+
+			&:hover {
+				color: $hint;
+			}
+		}
+
+		&_dots {
+			color: $gray3;
+		}
+
+		&_prev,
+		&_next {
+			@extend .icon;
+			width: 40rem;
+		}
+
+		&_prev {
+			@extend .icon-chevron-left-regular;
+		}
+
+		&_next {
+			@extend .icon-chevron-right-regular;
+		}
+	}
+}

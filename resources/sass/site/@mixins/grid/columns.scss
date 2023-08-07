@@ -1,0 +1,45 @@
+/* CSS-свойство: grid-column
+ *
+ * Пример: @include col(6) — ширина колонки будет равна шести колонкам
+ * Пример: @include col(2 4) — ширина колонки будет 4 колонки и начнется она со второй колонки
+ * Пример: @include col(2 2, t) — ширина колонки будет 2 колонки и начнется она со второй колонки для планшетов
+*/
+@mixin col($value, $mq: null) {
+	@if(length($value) > 1) {
+		$start: nth($value, 1);
+		$size: nth($value, 2);
+
+		@include mqs($mq) {
+			grid-column: $start / span $size;
+		}
+	}
+
+	@else {
+		@include mqs($mq) {
+			grid-column: auto / span $value;
+		}
+	}
+}
+
+/* CSS-свойство: grid-row
+ *
+ * Пример: @include row(2) — строка будет растягиваться по вертикали на две строки.
+ * Пример: @include row(2 4) — строка будет занимать 4 строки и начнется со второй строки.
+ * Пример: @include row(2 4, d) — строка будет занимать 4 строки и начнется со второй строки для десктопов.
+*/
+@mixin row($value, $mq: null) {
+	@if(length($value) > 1) {
+		$start: nth($value, 1);
+		$size: nth($value, 2);
+
+		@include mqs($mq) {
+			grid-row: $start / span $size;
+		}
+	}
+
+	@else {
+		@include mqs($mq) {
+			grid-row: auto / span $value;
+		}
+	}
+}

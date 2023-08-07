@@ -1,0 +1,91 @@
+.btn {
+	@extend .font-bold;
+	position: relative;
+	padding: 16rem 24rem;
+	width: max-content;
+	max-width: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 16rem;
+	line-height: 24rem;
+	font-family: $common-font;
+	text-decoration: none;
+
+	cursor: pointer;
+	transition: .3s;
+
+	@include phone {
+		width: 100%;
+	}
+
+	.icon + span,
+	span + .icon {
+		margin-left: 4rem;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		// pointer-events: none;
+		opacity: 0.75;
+	}
+
+	&_primary {
+		color: $w;
+		background-color: $primary;
+
+		&:not(:disabled):hover {
+			background-color: $primary-light;
+		}
+
+		&:active {
+			background-color: $primary-dark;
+		}
+
+		&:focus {
+			box-shadow: $primary-light 0 0 0 2rem;
+		}
+	}
+}
+
+.btn-ghost {
+	@extend .btn;
+	border: 1rem solid transparent;
+	border-radius: 2rem;
+	background-color: transparent;
+
+	&_primary {
+		color: $primary;
+		border-color: $primary;
+
+		&:not(:disabled):hover {
+			color: $primary-light;
+			border-color: $primary-light;
+		}
+
+		&:active {
+			color: $primary-dark;
+			border-color: $primary-dark;
+		}
+
+		&:focus {
+			box-shadow: $primary-light 0 0 0 2rem;
+		}
+	}
+}
+
+.btn-link {
+	@extend .btn-ghost;
+	border: none;
+	padding: 0;
+
+	&_primary {
+		@extend .btn-ghost_primary;
+	}
+
+	&:focus {
+		box-shadow: none;
+	}
+}

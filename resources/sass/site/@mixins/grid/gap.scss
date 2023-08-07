@@ -1,0 +1,41 @@
+/* CSS-свойство: grid-gap
+ *
+ * Пример: @include gap(16) — 16rem отступов по горизонтали и вертикали
+ * Пример: @include gap(16 8) — 16rem отступов по горизонтали и 8rem вертикали
+ * Пример: @include gap(8, pp) — 8rem отступов по горизонтали и вертикали на телефоне
+ */
+@mixin gap($value, $mq: null) {
+	@if(length($value) > 1) {
+		@include mqs($mq) {
+			grid-gap: strip-units(nth($value, 2)) + rem strip-units(nth($value, 1)) + rem;
+		}
+	}
+
+	@else {
+		@include mqs($mq) {
+			grid-gap: strip-units($value) + rem;
+		}
+	}
+}
+
+/* CSS-свойство: grid-column-gap
+ *
+ * Пример: @include gap-col(16) — 16rem отступов по горизонтали
+ * Пример: @include gap-col(8, p) — 8rem отступов по горизонтали на телефоне
+ */
+@mixin gap-col($value, $mq: null) {
+	@include mqs($mq) {
+		grid-column-gap: strip-units($value) + rem;
+	}
+}
+
+/* CSS-свойство: grid-row-gap
+ *
+ * Пример: @include gap-col(16) — 16rem отступов по вертикали
+ * Пример: @include gap-col(8, p) — 8rem отступов по вертикали на телефоне
+ */
+@mixin gap-row($value, $mq: null) {
+	@include mqs($mq) {
+		grid-row-gap: strip-units($value) + rem;
+	}
+}

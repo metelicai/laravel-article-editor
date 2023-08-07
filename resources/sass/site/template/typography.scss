@@ -1,0 +1,140 @@
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+	@extend .font-bold;
+	font-family: $headings-font;
+	color: $h;
+}
+
+h1,
+.h1 {
+	@extend .uppercase;
+	font-size: 56rem;
+	line-height: 72rem;
+	// font-feature-settings: "ss01";
+
+	@include phone {
+		font-size: 32rem;
+		line-height: 40rem;
+	}
+}
+
+
+h2,
+.h2 {
+	@extend .uppercase;
+	font-size: 32rem;
+	line-height: 40rem;
+
+	@include phone {
+		font-size: 24rem;
+		line-height: 32rem;
+	}
+}
+
+h3,
+.h3 {
+	font-size: 24rem;
+	line-height: 32rem;
+
+	@include phone {
+		font-size: 16rem;
+		line-height: 24rem;
+	}
+}
+
+h4,
+.h4 {
+	font-size: 24rem;
+	line-height: 32rem;
+}
+
+h5,
+.h5 {
+	font-size: 24rem;
+	line-height: 32rem;
+}
+
+h6,
+.h6 {
+	font-size: 16rem;
+	line-height: 24rem;
+}
+
+/* Параграфы */
+
+// Лид
+.lead {
+	font-size: 24rem;
+	line-height: 32rem;
+}
+
+// Параграф
+p,
+.p {
+	font-family: $common-font;
+	font-size: 16rem;
+	line-height: 24rem;
+	font-weight: 400;
+	color: $ink;
+}
+
+.list {
+	padding-left: 16rem;
+	font-size: 16rem;
+	line-height: 24rem;
+
+	li {
+		list-style-type: disc;
+		color: $ink;
+	}
+}
+
+
+// Жирность шрифта
+.font {
+	&-medium {
+		font-weight: 500;
+	}
+
+	&-semi-bold {
+		font-weight: 600;
+	}
+
+	&-bold {
+		font-weight: 700;
+	}
+
+	&-italic {
+		font-style: italic;
+	}
+}
+
+// Без разбивки на строки
+.text-nowrap {
+	white-space: nowrap;
+}
+
+.hint {
+	font-size: 12rem;
+	line-height: 16rem;
+	font-weight: 400;
+	color: $hint;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.lowercase {
+	text-transform: lowercase;
+}

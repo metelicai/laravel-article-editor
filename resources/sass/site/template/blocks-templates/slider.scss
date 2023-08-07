@@ -1,0 +1,17 @@
+.slider-template {
+	@extend .spacing-default;
+
+	.slider {
+		&__title {
+			margin-bottom: 16rem;
+		}
+
+		&__description {
+			@include grid(1);
+			@include gap(24);
+			margin-bottom: 24rem;
+		}
+
+		// .swiper-slider {} // Из template/components/slider/*
+	}
+}

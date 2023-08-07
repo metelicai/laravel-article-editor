@@ -1,0 +1,26 @@
+.cover-template {
+	@extend .spacing-default;
+
+	.cover {
+		@include grid(2, d);
+		@include grid(1, m);
+		@include gap(32 64);
+
+		// &__text {}
+
+		&__title {
+			margin-bottom: 16rem;
+		}
+
+		&__description {
+			@include grid(1);
+			@include gap(24);
+		}
+
+		&__button {
+			margin-top: 32rem;
+		}
+
+		// &__image {}
+	}
+}

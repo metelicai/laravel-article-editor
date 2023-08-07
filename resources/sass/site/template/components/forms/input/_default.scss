@@ -1,0 +1,98 @@
+$field-padding-x: 16rem;
+$field-padding-y: 16rem;
+$icon-padding: 48rem;
+$icon-size: 24rem;
+
+.input {
+	position: relative;
+	display: grid;
+	grid-auto-rows: max-content;
+
+	&__field {
+		@include order(2);
+		position: relative;
+		padding: $field-padding-y $field-padding-x;
+		font-size: 16rem;
+		line-height: 24rem;
+		font-family: $common-font;
+		font-weight: normal;
+		text-transform: none;
+		border: 1rem solid transparent;
+		border-radius: 1rem;
+		transition: $transition;
+		width: 100%;
+
+		&:required {
+			& ~ .input__label .input__label-required-char {
+				display: initial;
+			}
+		}
+
+		&_icon-left {
+			padding-left: $icon-padding;
+
+			& + .input__icon {
+				left: $field-padding-x;
+			}
+		}
+
+		&_icon-right {
+			padding-right: $icon-padding;
+
+			& + .input__icon {
+				justify-self: end;
+				right: $field-padding-x;
+			}
+		}
+	}
+
+	&__label {
+		@include order(1);
+		display: block;
+		line-height: 24rem;
+		width: 100%;
+		margin-bottom: 8rem;
+
+		&-required-char {
+			display: none;
+		}
+	}
+
+	&__icon {
+		@include order(3);
+		position: relative;
+		top: calc(($icon-size + $field-padding-y + 1rem) * -1);
+		margin-bottom: -$icon-size;
+		width: max-content;
+		z-index: 10;
+
+		&::before {
+			font-size: $icon-size;
+			line-height: $icon-size;
+		}
+	}
+
+	&__hint {
+		@extend .hint;
+		@include order(4);
+		margin-top: 6rem;
+	}
+
+	&__error {
+		@extend .hint;
+		@include order(5);
+		margin-top: 6rem;
+	}
+
+	& > select {
+		// Чиним селект в safari
+		appearance: none;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		// Стрелка
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='%23222222' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 11L2.80385 5L13.1962 5L8 11Z' /%3E%3C/svg%3E");
+		background-repeat: no-repeat, repeat;
+		background-position: right 8rem top 50%;
+		background-size: 16rem auto;
+	}
+}

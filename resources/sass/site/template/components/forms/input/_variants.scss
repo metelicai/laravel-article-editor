@@ -1,0 +1,67 @@
+.input {
+
+	// PRIMARY
+	&_primary {
+		.input__label {
+			color: $gray5;
+
+			&-required-char {
+				color: $primary;
+			}
+		}
+
+		.input__icon {
+			color: $primary;
+		}
+
+		.input__field {
+			color: $gray6;
+			background-color: $w;
+			border-color: $gray2;
+
+			&:not(:disabled):hover {
+				border-color: $gray3;
+			}
+
+			&:disabled {
+
+				&,
+				& + .input__icon {
+					opacity: 0.5;
+				}
+			}
+
+			&:focus {
+				border-color: $primary  !important;
+			}
+
+			&::placeholder {
+				color: $gray3;
+			}
+		}
+	}
+
+	// ERROR
+	&_error {
+		.input__field {
+			border-color: $error  !important;
+		}
+
+		.input__error {
+			@extend .font-bold;
+			color: $error;
+		}
+	}
+
+	// ANTI BOT
+	&_ab {
+		position: absolute !important;
+		width: 0 !important;
+		height: 1px !important;
+		padding: 0 !important;
+		// background-color: none !important;
+		border: none !important;
+		top: 0;
+		overflow: hidden;
+	}
+}

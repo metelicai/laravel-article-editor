@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.select {
+	position: relative;
+	padding: 7rem 16rem;
+	font-size: 16rem;
+	line-height: 24rem;
+	font-family: $common-font;
+	font-weight: normal;
+	text-transform: none;
+	border: 1rem solid $gray3;
+	border-radius: 2rem;
+	cursor: pointer;
+	background-color: transparent;
+	transition: color .1s ease-in, border-color .1s ease-in, box-shadow .3s;
+
+	&:not(:disabled):hover {
+		border-color: $primary;
+	}
+
+	&:not(:disabled):focus {
+		box-shadow: transparentize($primary, 0.75) 0 0 0 2rem;
+	}
+
+	&:disabled {
+		background-color: #eeeeee;
+	}
+
+	&.big {
+		padding: 15rem 16rem;
+	}
+
+	&.small {
+		padding: 7rem 16rem;
+		font-size: 12rem;
+		line-height: 16rem;
+	}
+}

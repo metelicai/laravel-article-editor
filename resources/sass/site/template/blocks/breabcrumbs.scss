@@ -1,0 +1,28 @@
+.breadcrumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8rem 4rem;
+	margin-bottom: 16rem;
+
+	&__item {
+		list-style: none;
+	}
+
+	&__link {
+		@extend .p;
+		color: $primary;
+		text-decoration: none;
+
+		.icon {
+			position: relative;
+			bottom: -7rem;
+			margin-left: 4rem;
+			line-height: 16rem;
+			color: $gray4;
+		}
+
+		&:hover {
+			color: $primary-light;
+		}
+	}
+}
