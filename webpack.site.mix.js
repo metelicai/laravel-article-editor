@@ -8,7 +8,24 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const assetsPath = 'public/assets/site'
 mix.setPublicPath(assetsPath)
 
+// Исключаем обработку url-путей при использовании import в js, для .svg файлов в папке /resources/js/site
+// Ниже делаем обработку импортов .svg как html
+const excludeJsSvgReges = /resources\/js\/site\/(.*)\.svg$/
+mix.override(config => {
+	const ruleWithSvg = config.module.rules.find(rule => rule.test.test('.svg'))
+	if (ruleWithSvg) ruleWithSvg.exclude = [excludeJsSvgReges]
+})
+
 mix.webpackConfig({
+	module: {
+		rules: [
+			// Делаем обработку импортов .svg как html в указанной папке
+			{
+				test: excludeJsSvgReges,
+				use: [{ loader: 'html-loader' }],
+			},
+		],
+	},
 	output: {
 		publicPath: '/assets/site/',
 	},

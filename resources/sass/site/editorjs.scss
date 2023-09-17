@@ -1,0 +1,18 @@
+@import 'editorjs/quote.css';
+
+#editorjs {
+
+	// Параграф
+	.ce-paragraph {
+		@extend .p;
+	}
+
+	// Заголовки
+	.ce-header {}
+
+	@for $i from 1 through 6 {
+		h#{$i}.ce-header {
+			@extend .h#{$i},
+		}
+	}
+}

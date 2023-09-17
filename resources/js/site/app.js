@@ -14,6 +14,11 @@ import VModal from './components/VModal'
 import VRecall from './components/VRecall'
 import VTabs from './components/tabs/VTabs'
 import VTabsTab from './components/tabs/VTabsTab'
+import Editorjs from './components/Editorjs.vue'
+import QuillEditor from './components/QuillEditor.vue'
+import SunEditor from './components/SunEditor.vue'
+import Editor from './components/editor/Editor.vue'
+import pdfviewer from './components/PDFViewer.vue'
 
 // vue init
 import { createApp } from 'vue'
@@ -32,6 +37,11 @@ function setup() {
 			VRecall,
 			VTabs,
 			VTabsTab,
+			Editorjs,
+			QuillEditor,
+			SunEditor,
+			Editor,
+			pdfviewer,
 		},
 		mounted() {
 			// load static js

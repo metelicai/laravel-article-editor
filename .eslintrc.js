@@ -18,7 +18,7 @@ module.exports = {
 	],
 	rules: {
 		'no-tabs': 0,
-		'space-before-function-paren': ['error', { anonymous: 'always', named: 'never', asyncArrow: 'never' }],
+		'space-before-function-paren': ['error', { anonymous: 'always', named: 'never', asyncArrow: 'always' }],
 		'padded-blocks': ['error', 'never'],
 		'no-console': 'warn',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

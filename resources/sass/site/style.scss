@@ -82,3 +82,12 @@
 @import "template/blocks-templates/recall.scss";
 @import "template/blocks-templates/slider.scss";
 @import "template/blocks-templates/gallery.scss";
+
+//
+
+@import "editorjs.scss";
+
+@import '~@vueup/vue-quill/dist/vue-quill.snow.css';
+
+@import "~suneditor/src/assets/css/suneditor.css";
+@import "~suneditor/src/assets/css/suneditor-contents.css";
