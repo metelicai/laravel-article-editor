@@ -11,11 +11,16 @@
 				:defaultConfig="editorConfig"
 				mode="default"
 				style="min-height: 200px; overflow-y: hidden;"
-				@onCreated="handleCreated" @onChange="handleChange" />
+				@onCreated="handleCreated"
+				@onChange="handleChange" />
 			<MentionModal
 				v-if="isShowMentionModal"
 				v-model="isShowMentionModal"
 				:editor="editorRef"></MentionModal>
+			<FootnoteModal
+				v-if="isShowFootnoteModal"
+				v-model="isShowFootnoteModal"
+				:editor="editorRef"></FootnoteModal>
 		</div>
 	</div>
 </template>
@@ -25,18 +30,22 @@ import '@wangeditor/editor/dist/css/style.css' // import css
 
 import { onBeforeUnmount, ref, shallowRef } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { Boot, DomEditor, i18nChangeLanguage } from '@wangeditor/editor'
+import { Boot, i18nChangeLanguage } from '@wangeditor/editor'
 import leadModule from './text-block-editor-modules/lead/index'
 import headerModule from './text-block-editor-modules/header/index'
 import textStyleSelectModule from './text-block-editor-modules/text-style-select/index'
 import shiftEnterModule from './text-block-editor-modules/shift-enter/index'
+import footnoteModule from './text-block-editor-modules/footnote/index'
 import mentionModule from './text-block-editor-modules/mention/index'
 import MentionModal from './text-block-editor-modules/MentionModal'
+import FootnoteModal from './text-block-editor-modules/footnote/FootnoteModal'
+import { updateFootnotesNumbers } from './text-block-editor-modules/footnote/helpers'
 
 Boot.registerModule(headerModule)
 Boot.registerModule(textStyleSelectModule)
 Boot.registerModule(leadModule)
 Boot.registerModule(shiftEnterModule)
+Boot.registerModule(footnoteModule)
 Boot.registerModule(mentionModule)
 i18nChangeLanguage('en')
 
@@ -57,11 +66,12 @@ const toolbarConfig = {
 	toolbarKeys: [
 		'textStyleSelect',
 		// 'headerSelect',
-		'myHeader1',
+		// 'myHeader1',
 		// 'header1',
-		'myHeader2',
+		// 'myHeader2',
 		// 'header2',
 		'lead',
+		'insertFootnote',
 		'|',
 		'bold',
 		'italic',
@@ -221,16 +231,26 @@ const editorConfig = {
 				'clearStyle',
 			],
 		},
+		footnote: {
+			menuKeys: [
+				'editFootnote',
+			],
+		},
 	},
 	EXTEND_CONF: {
 		mentionConfig: {
 			showModal: () => { isShowMentionModal.value = true },
 			hideModal: () => { isShowMentionModal.value = false },
 		},
+		footnoteConfig: {
+			showModal: () => { isShowFootnoteModal.value = true },
+			hideModal: () => { isShowFootnoteModal.value = false },
+		},
 	},
 }
 
 const isShowMentionModal = ref(false)
+const isShowFootnoteModal = ref(false)
 
 onBeforeUnmount(() => {
 	const editor = editorRef.value
@@ -246,10 +266,22 @@ const handleCreated = (editor) => {
 }
 
 const handleChange = (editor) => {
-	// const toolbar = DomEditor.getToolbar(editor)
+	// handleFootnotes(editor)
 
+	// const toolbar = DomEditor.getToolbar(editor)
 	// console.log(toolbar.getConfig().toolbarKeys)
 	// console.log(editor.getConfig().hoverbarKeys)
-	// console.log(editor.getConfig())
+	// consol.elog(editor.getConfig())
+}
+
+const lastFootnotesCount = ref(0)
+function handleFootnotes(editor) {
+	const footnotes = editor.getElemsByType('footnote')
+	_data.value.footnotes = footnotes
+
+	// Обновить id сносок при удалении сноски
+	const footnotesCount = footnotes.length
+	if (footnotesCount < lastFootnotesCount.value) updateFootnotesNumbers(editor)
+	lastFootnotesCount.value = footnotesCount
 }
 </script>

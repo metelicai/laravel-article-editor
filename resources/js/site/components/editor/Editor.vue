@@ -33,7 +33,8 @@ const blocks = ref([
 		id: 2,
 		type: 'text',
 		data: {
-			content: '<p>123</p><p>123</p><p>123 <a href="/users/3" data-w-e-type="mention" data-id="3" data-name="Item 3">@Item 3</a></p>',
+			content: '',
+			// content: '<p>111<a href="#footnote-1" id="footnote-link-1" data-number="1" data-value="111" data-w-e-type="footnote">[1]</a></p><p>222</p><p>333<a href="#footnote-2" id="footnote-link-2" data-number="2" data-value="333" data-w-e-type="footnote">[2]</a></p><p>444</p><p>555</p><p>666<a href="#footnote-3" id="footnote-link-3" data-number="3" data-value="666" data-w-e-type="footnote">[3]</a></p>',
 		},
 	},
 ])

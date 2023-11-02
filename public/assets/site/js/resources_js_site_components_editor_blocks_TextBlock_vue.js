@@ -19,9 +19,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _text_block_editor_modules_header_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./text-block-editor-modules/header/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/header/index.js");
 /* harmony import */ var _text_block_editor_modules_text_style_select_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./text-block-editor-modules/text-style-select/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/text-style-select/index.js");
 /* harmony import */ var _text_block_editor_modules_shift_enter_index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./text-block-editor-modules/shift-enter/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/shift-enter/index.js");
-/* harmony import */ var _text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./text-block-editor-modules/mention/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/mention/index.js");
-/* harmony import */ var _text_block_editor_modules_MentionModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./text-block-editor-modules/MentionModal */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/MentionModal.vue");
+/* harmony import */ var _text_block_editor_modules_footnote_index__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./text-block-editor-modules/footnote/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/index.js");
+/* harmony import */ var _text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./text-block-editor-modules/mention/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/mention/index.js");
+/* harmony import */ var _text_block_editor_modules_MentionModal__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./text-block-editor-modules/MentionModal */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/MentionModal.vue");
+/* harmony import */ var _text_block_editor_modules_footnote_FootnoteModal__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./text-block-editor-modules/footnote/FootnoteModal */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue");
+/* harmony import */ var _text_block_editor_modules_footnote_helpers__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./text-block-editor-modules/footnote/helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js");
  // import css
+
+
+
 
 
 
@@ -52,18 +58,19 @@ __webpack_require__.r(__webpack_exports__);
     _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_text_style_select_index__WEBPACK_IMPORTED_MODULE_6__["default"]);
     _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_lead_index__WEBPACK_IMPORTED_MODULE_4__["default"]);
     _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_shift_enter_index__WEBPACK_IMPORTED_MODULE_7__["default"]);
-    _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_8__["default"]);
+    _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_footnote_index__WEBPACK_IMPORTED_MODULE_8__["default"]);
+    _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot.registerModule(_text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_9__["default"]);
     (0,_wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.i18nChangeLanguage)('en');
     var editorRef = (0,vue__WEBPACK_IMPORTED_MODULE_1__.shallowRef)();
     var _data = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(props.data);
     var toolbarConfig = {
       toolbarKeys: ['textStyleSelect',
       // 'headerSelect',
-      'myHeader1',
+      // 'myHeader1',
       // 'header1',
-      'myHeader2',
+      // 'myHeader2',
       // 'header2',
-      'lead', '|', 'bold', 'italic', 'underline', 'through', '|', 'sup', 'sub', 'blockquote', '|', 'color', 'bgColor', 'clearStyle', '|', 'bulletedList', 'numberedList', {
+      'lead', 'insertFootnote', '|', 'bold', 'italic', 'underline', 'through', '|', 'sup', 'sub', 'blockquote', '|', 'color', 'bgColor', 'clearStyle', '|', 'bulletedList', 'numberedList', {
         key: 'group-indent',
         title: 'Indent',
         iconSvg: '<svg viewBox=\'0 0 1024 1024\'><path d=\'M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z\'></path></svg>',
@@ -155,6 +162,9 @@ __webpack_require__.r(__webpack_exports__);
         },
         text: {
           menuKeys: ['headerSelect', 'insertLink', '|', 'bold', 'italic', '|', 'color', 'bgColor', 'clearStyle']
+        },
+        footnote: {
+          menuKeys: ['editFootnote']
         }
       },
       EXTEND_CONF: {
@@ -165,10 +175,19 @@ __webpack_require__.r(__webpack_exports__);
           hideModal: function hideModal() {
             isShowMentionModal.value = false;
           }
+        },
+        footnoteConfig: {
+          showModal: function showModal() {
+            isShowFootnoteModal.value = true;
+          },
+          hideModal: function hideModal() {
+            isShowFootnoteModal.value = false;
+          }
         }
       }
     };
     var isShowMentionModal = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
+    var isShowFootnoteModal = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
     (0,vue__WEBPACK_IMPORTED_MODULE_1__.onBeforeUnmount)(function () {
       var editor = editorRef.value;
       if (editor == null) return;
@@ -182,12 +201,23 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var handleChange = function handleChange(editor) {
-      // const toolbar = DomEditor.getToolbar(editor)
+      // handleFootnotes(editor)
 
+      // const toolbar = DomEditor.getToolbar(editor)
       // console.log(toolbar.getConfig().toolbarKeys)
       // console.log(editor.getConfig().hoverbarKeys)
-      // console.log(editor.getConfig())
+      // consol.elog(editor.getConfig())
     };
+    var lastFootnotesCount = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(0);
+    function handleFootnotes(editor) {
+      var footnotes = editor.getElemsByType('footnote');
+      _data.value.footnotes = footnotes;
+
+      // Обновить id сносок при удалении сноски
+      var footnotesCount = footnotes.length;
+      if (footnotesCount < lastFootnotesCount.value) (0,_text_block_editor_modules_footnote_helpers__WEBPACK_IMPORTED_MODULE_12__.updateFootnotesNumbers)(editor);
+      lastFootnotesCount.value = footnotesCount;
+    }
     var __returned__ = {
       props: props,
       editorRef: editorRef,
@@ -195,8 +225,11 @@ __webpack_require__.r(__webpack_exports__);
       toolbarConfig: toolbarConfig,
       editorConfig: editorConfig,
       isShowMentionModal: isShowMentionModal,
+      isShowFootnoteModal: isShowFootnoteModal,
       handleCreated: handleCreated,
       handleChange: handleChange,
+      lastFootnotesCount: lastFootnotesCount,
+      handleFootnotes: handleFootnotes,
       onBeforeUnmount: vue__WEBPACK_IMPORTED_MODULE_1__.onBeforeUnmount,
       ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
       shallowRef: vue__WEBPACK_IMPORTED_MODULE_1__.shallowRef,
@@ -208,9 +241,6 @@ __webpack_require__.r(__webpack_exports__);
       },
       get Boot() {
         return _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.Boot;
-      },
-      get DomEditor() {
-        return _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.DomEditor;
       },
       get i18nChangeLanguage() {
         return _wangeditor_editor__WEBPACK_IMPORTED_MODULE_3__.i18nChangeLanguage;
@@ -227,11 +257,20 @@ __webpack_require__.r(__webpack_exports__);
       get shiftEnterModule() {
         return _text_block_editor_modules_shift_enter_index__WEBPACK_IMPORTED_MODULE_7__["default"];
       },
+      get footnoteModule() {
+        return _text_block_editor_modules_footnote_index__WEBPACK_IMPORTED_MODULE_8__["default"];
+      },
       get mentionModule() {
-        return _text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_8__["default"];
+        return _text_block_editor_modules_mention_index__WEBPACK_IMPORTED_MODULE_9__["default"];
       },
       get MentionModal() {
-        return _text_block_editor_modules_MentionModal__WEBPACK_IMPORTED_MODULE_9__["default"];
+        return _text_block_editor_modules_MentionModal__WEBPACK_IMPORTED_MODULE_10__["default"];
+      },
+      get FootnoteModal() {
+        return _text_block_editor_modules_footnote_FootnoteModal__WEBPACK_IMPORTED_MODULE_11__["default"];
+      },
+      get updateFootnotesNumbers() {
+        return _text_block_editor_modules_footnote_helpers__WEBPACK_IMPORTED_MODULE_12__.updateFootnotesNumbers;
       }
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -370,6 +409,152 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js":
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+/* harmony import */ var _wangeditor_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wangeditor/core */ "./node_modules/@wangeditor/core/dist/index.esm.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  __name: 'FootnoteModal',
+  props: {
+    modelValue: Boolean,
+    editor: {
+      type: Object,
+      required: true
+    }
+  },
+  emits: ['update:modelValue'],
+  setup: function setup(__props, _ref) {
+    var expose = _ref.expose,
+      emits = _ref.emit;
+    expose();
+    var props = __props;
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(function () {
+      setModalPosition();
+      getSelectedFootnote();
+    });
+    var top = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('');
+    var left = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)('');
+    function setModalPosition() {
+      // Get cursor position
+      var domSelection = document.getSelection();
+      var domRange = domSelection === null || domSelection === void 0 ? void 0 : domSelection.getRangeAt(0);
+      if (domRange == null) return;
+      var rect = domRange.getBoundingClientRect();
+
+      // Set modal position
+      top.value = "".concat(rect.top + 20, "px");
+      left.value = "".concat(rect.left + 5, "px");
+      input.value.focus();
+    }
+    var selectedFootnote = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+    function getSelectedFootnote() {
+      selectedFootnote.value = _wangeditor_core__WEBPACK_IMPORTED_MODULE_2__.DomEditor.getSelectedNodeByType(props.editor, 'footnote');
+      if (selectedFootnote.value) {
+        var _selectedFootnote$val;
+        input.value.value = ((_selectedFootnote$val = selectedFootnote.value) === null || _selectedFootnote$val === void 0 ? void 0 : _selectedFootnote$val.value) || '';
+      }
+    }
+    var input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)();
+    function inputKeyupHandler(event) {
+      if (event.key === 'Escape') closeModal();
+      if (event.key === 'Enter') submitFootnote();
+    }
+    function submitFootnote() {
+      if (props.editor) {
+        props.editor.restoreSelection();
+        selectedFootnote.value ? updateFootnote() : insertFootnote();
+      }
+      closeModal();
+    }
+    function insertFootnote() {
+      var footnoteNode = {
+        type: 'footnote',
+        number: '',
+        value: input.value.value || '',
+        children: [{
+          text: ''
+        }] // There must be an empty text as children
+      };
+
+      // props.editor.deleteBackward('character') // Delete '@'
+      props.editor.insertNode(footnoteNode);
+      props.editor.move(1); // Move cursor
+
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.updateFootnotesNumbers)(props.editor);
+    }
+    function updateFootnote() {
+      var footnote = _objectSpread(_objectSpread({}, selectedFootnote.value), {}, {
+        value: input.value.value || ''
+      });
+      _wangeditor_editor__WEBPACK_IMPORTED_MODULE_1__.SlateTransforms.setNodes(props.editor, footnote, {
+        match: function match(n) {
+          return _wangeditor_core__WEBPACK_IMPORTED_MODULE_2__.DomEditor.checkNodeType(n, 'footnote');
+        }
+      });
+    }
+    function closeModal() {
+      props.editor.restoreSelection();
+      emits('update:modelValue', false);
+    }
+    var __returned__ = {
+      props: props,
+      emits: emits,
+      top: top,
+      left: left,
+      setModalPosition: setModalPosition,
+      selectedFootnote: selectedFootnote,
+      getSelectedFootnote: getSelectedFootnote,
+      input: input,
+      inputKeyupHandler: inputKeyupHandler,
+      submitFootnote: submitFootnote,
+      insertFootnote: insertFootnote,
+      updateFootnote: updateFootnote,
+      closeModal: closeModal,
+      onMounted: vue__WEBPACK_IMPORTED_MODULE_0__.onMounted,
+      ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref,
+      get SlateTransforms() {
+        return _wangeditor_editor__WEBPACK_IMPORTED_MODULE_1__.SlateTransforms;
+      },
+      get t() {
+        return _wangeditor_editor__WEBPACK_IMPORTED_MODULE_1__.t;
+      },
+      get DomEditor() {
+        return _wangeditor_core__WEBPACK_IMPORTED_MODULE_2__.DomEditor;
+      },
+      get updateFootnotesNumbers() {
+        return _helpers__WEBPACK_IMPORTED_MODULE_3__.updateFootnotesNumbers;
+      }
+    };
+    Object.defineProperty(__returned__, '__isScriptSetup', {
+      enumerable: false,
+      value: true
+    });
+    return __returned__;
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=template&id=55f09c1a":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=template&id=55f09c1a ***!
@@ -418,6 +603,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $setup.isShowMentionModal = $event;
     }),
     editor: $setup.editorRef
+  }, null, 8 /* PROPS */, ["modelValue", "editor"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.isShowFootnoteModal ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["FootnoteModal"], {
+    key: 1,
+    modelValue: $setup.isShowFootnoteModal,
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $setup.isShowFootnoteModal = $event;
+    }),
+    editor: $setup.editorRef
   }, null, 8 /* PROPS */, ["modelValue", "editor"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
 }
 
@@ -458,6 +650,493 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 9 /* TEXT, PROPS */, _hoisted_1);
   }), 128 /* KEYED_FRAGMENT */))])], 4 /* STYLE */);
 }
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = ["onSubmit"];
+var _hoisted_2 = {
+  "class": "babel-container"
+};
+var _hoisted_3 = {
+  "class": "button-container"
+};
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  viewBox: "0 0 1024 1024"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  d: "M1024 896.1024l-128 128L512 640 128 1024 0 896 384 512 0 128 128 0 512 384 896.1024 0l128 128L640 512z"
+})], -1 /* HOISTED */);
+var _hoisted_5 = [_hoisted_4];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+    "class": "w-e-modal",
+    style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({
+      top: $setup.top,
+      left: $setup.left,
+      width: '300px'
+    })
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    onSubmit: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.submitFootnote, ["prevent"])
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.t('footnote.valueInputLabel')), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+    type: "text",
+    rows: "4",
+    required: "",
+    ref: "input",
+    onKeyup: $setup.inputKeyupHandler
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.t('common.ok')), 1 /* TEXT */)])], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    "class": "btn-close",
+    onClick: $setup.closeModal
+  }, _hoisted_5)], 4 /* STYLE */);
+}
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/elem-to-html.js":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/elem-to-html.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function footnoteToHtml(elem, childrenHtml) {
+  var _elem$number = elem.number,
+    number = _elem$number === void 0 ? null : _elem$number,
+    _elem$value = elem.value,
+    value = _elem$value === void 0 ? '' : _elem$value;
+  return "<a href=\"#footnote-".concat(number, "\" id=\"footnote-link-").concat(number, "\" data-number=\"").concat(number, "\" data-value=\"").concat(value, "\" data-w-e-type=\"footnote\">[").concat(number, "]</a>");
+}
+var conf = {
+  type: 'footnote',
+  elemToHtml: footnoteToHtml
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (conf);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getFootnoteConfig": () => (/* binding */ getFootnoteConfig),
+/* harmony export */   "showModal": () => (/* binding */ showModal),
+/* harmony export */   "updateFootnotesNumbers": () => (/* binding */ updateFootnotesNumbers)
+/* harmony export */ });
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+/* harmony import */ var _wangeditor_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wangeditor/core */ "./node_modules/@wangeditor/core/dist/index.esm.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+
+
+function getFootnoteConfig(editor) {
+  var _editor$getConfig = editor.getConfig(),
+    EXTEND_CONF = _editor$getConfig.EXTEND_CONF;
+  var footnoteConfig = EXTEND_CONF.footnoteConfig;
+  return footnoteConfig;
+}
+function showModal(editor) {
+  var _getFootnoteConfig = getFootnoteConfig(editor),
+    showModal = _getFootnoteConfig.showModal,
+    hideModal = _getFootnoteConfig.hideModal;
+  if (showModal) showModal(editor);
+  setTimeout(function () {
+    function _hide() {
+      if (hideModal) hideModal(editor);
+    }
+    editor.once('fullScreen', _hide);
+    editor.once('unFullScreen', _hide);
+    editor.once('scroll', _hide);
+    editor.once('modalOrPanelShow', _hide);
+    editor.once('modalOrPanelHide', _hide);
+    function hideOnChange() {
+      if (editor.selection != null) {
+        _hide();
+        editor.off('change', hideOnChange); // Unbind in time
+      }
+    }
+
+    editor.on('change', hideOnChange);
+  });
+}
+function updateFootnotesNumbers(editor) {
+  var footnoteElements = _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.SlateEditor.nodes(editor, {
+    at: [],
+    // Path of Editor
+    match: function match(node, path) {
+      return node.type === 'footnote';
+    }
+  });
+  var number = 1;
+  var _iterator = _createForOfIteratorHelper(footnoteElements),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var _step$value = _slicedToArray(_step.value, 2),
+        nodeEntry = _step$value[0],
+        location = _step$value[1];
+      var footnote = _objectSpread({}, nodeEntry);
+      footnote.number = number++;
+      _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.SlateTransforms.select(editor, location);
+      _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.SlateTransforms.setNodes(editor, footnote, {
+        match: function match(n) {
+          return _wangeditor_core__WEBPACK_IMPORTED_MODULE_1__.DomEditor.checkNodeType(n, 'footnote');
+        }
+      });
+      // editor.restoreSelection()
+      // editor.move(1) // Move cursor
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  editor.restoreSelection();
+}
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/index.js":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/index.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./plugin */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/plugin.js");
+/* harmony import */ var _render_elem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-elem */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/render-elem.js");
+/* harmony import */ var _elem_to_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./elem-to-html */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/elem-to-html.js");
+/* harmony import */ var _parse_elem_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./parse-elem-html */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/parse-elem-html.js");
+/* harmony import */ var _menu_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./menu/index */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/index.js");
+
+
+
+
+
+var module = {
+  editorPlugin: _plugin__WEBPACK_IMPORTED_MODULE_0__["default"],
+  renderElems: [_render_elem__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  elemsToHtml: [_elem_to_html__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  parseElemsHtml: [_parse_elem_html__WEBPACK_IMPORTED_MODULE_3__["default"]],
+  menus: [_menu_index__WEBPACK_IMPORTED_MODULE_4__.insertFootnoteMenuConf, _menu_index__WEBPACK_IMPORTED_MODULE_4__.editFootnoteMenuConf]
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (module);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/EditFootnote.js":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/EditFootnote.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/helpers.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+/**
+ * @description button menu base
+ */
+
+
+
+
+var EditFootnoteButtonMenu = /*#__PURE__*/function () {
+  function EditFootnoteButtonMenu() {
+    _classCallCheck(this, EditFootnoteButtonMenu);
+    _defineProperty(this, "title", (0,_wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.t)('footnote.edit'));
+    _defineProperty(this, "iconSvg", '<svg viewBox="0 0 1024 1024"><path d="M864 0a160 160 0 0 1 128 256l-64 64-224-224 64-64c26.752-20.096 59.968-32 96-32zM64 736l-64 288 288-64 592-592-224-224L64 736z m651.584-372.416l-448 448-55.168-55.168 448-448 55.168 55.168z"></path></svg>');
+    _defineProperty(this, "type", 'footnote');
+    _defineProperty(this, "tag", 'button');
+  }
+  _createClass(EditFootnoteButtonMenu, [{
+    key: "getValue",
+    value: function getValue(editor) {
+      return '';
+    }
+  }, {
+    key: "isActive",
+    value: function isActive(editor) {
+      return false;
+    }
+  }, {
+    key: "isDisabled",
+    value: function isDisabled(editor) {
+      if (editor.selection == null) return true;
+      var node = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.matchNode)(editor, function (type) {
+        return type === 'footnote';
+      });
+      return !node;
+    }
+  }, {
+    key: "exec",
+    value: function exec(editor, value) {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.showModal)(editor);
+    }
+  }]);
+  return EditFootnoteButtonMenu;
+}();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFootnoteButtonMenu);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/InsertFootnote.js":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/InsertFootnote.js ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/helpers.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/helpers.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+/**
+ * @description button menu base
+ */
+
+
+
+
+var InsertFootnoteButtonMenu = /*#__PURE__*/function () {
+  function InsertFootnoteButtonMenu() {
+    _classCallCheck(this, InsertFootnoteButtonMenu);
+    _defineProperty(this, "title", (0,_wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.t)('footnote.insert'));
+    _defineProperty(this, "iconSvg", '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.84788 0V2.22643H2.88479V21.7616H4.84788V24H0V0H4.84788Z" fill="black"/><path d="M14.2564 2.60948V20.0978H11.3716V6.03292L7.09825 7.4813V5.09925L13.9092 2.60948H14.2564Z" fill="black"/><path d="M19.1282 2.22643V0H24V24H19.1282V21.7616H21.1152V2.22643H19.1282Z" fill="black"/></svg>');
+    _defineProperty(this, "type", 'footnote');
+    _defineProperty(this, "tag", 'button');
+  }
+  _createClass(InsertFootnoteButtonMenu, [{
+    key: "getValue",
+    value: function getValue(editor) {
+      return '';
+    }
+  }, {
+    key: "isActive",
+    value: function isActive(editor) {
+      return false;
+    }
+  }, {
+    key: "isDisabled",
+    value: function isDisabled(editor) {
+      if (editor.selection == null) return true;
+      var node = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.matchNode)(editor, function (type) {
+        return type === 'paragraph' || type === 'footnote';
+      });
+      return !node;
+    }
+  }, {
+    key: "exec",
+    value: function exec(editor, value) {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.showModal)(editor);
+    }
+  }]);
+  return InsertFootnoteButtonMenu;
+}();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InsertFootnoteButtonMenu);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/index.js":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/index.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "editFootnoteMenuConf": () => (/* binding */ editFootnoteMenuConf),
+/* harmony export */   "insertFootnoteMenuConf": () => (/* binding */ insertFootnoteMenuConf)
+/* harmony export */ });
+/* harmony import */ var _InsertFootnote__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InsertFootnote */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/InsertFootnote.js");
+/* harmony import */ var _EditFootnote__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditFootnote */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/menu/EditFootnote.js");
+
+
+var insertFootnoteMenuConf = {
+  key: 'insertFootnote',
+  factory: function factory() {
+    return new _InsertFootnote__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  }
+};
+var editFootnoteMenuConf = {
+  key: 'editFootnote',
+  factory: function factory() {
+    return new _EditFootnote__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  }
+};
+
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/parse-elem-html.js":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/parse-elem-html.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function parseHtml(elem, children, editor) {
+  var number = elem.getAttribute('data-number') || null;
+  var value = elem.getAttribute('data-value') || null;
+
+  // void node (children) must have a blank text
+  return {
+    type: 'footnote',
+    number: number,
+    value: value,
+    children: [{
+      text: ''
+    }]
+  };
+}
+var parseHtmlConf = {
+  selector: 'a[data-w-e-type="footnote"]',
+  parseElemHtml: parseHtml
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (parseHtmlConf);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/plugin.js":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/plugin.js ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+
+function withFootnote(editor) {
+  var isInline = editor.isInline,
+    isVoid = editor.isVoid;
+  var newEditor = editor;
+
+  // rewrite isInline
+  newEditor.isInline = function (elem) {
+    var type = _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.DomEditor.getNodeType(elem);
+    if (type === 'footnote') {
+      return true;
+    }
+    return isInline(elem);
+  };
+
+  // rewrite isVoid
+  newEditor.isVoid = function (elem) {
+    var type = _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.DomEditor.getNodeType(elem);
+    if (type === 'footnote') {
+      return true;
+    }
+    return isVoid(elem);
+  };
+  return newEditor;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (withFootnote);
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/render-elem.js":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/render-elem.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var snabbdom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! snabbdom */ "./node_modules/snabbdom/build/h.js");
+/* harmony import */ var _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wangeditor/editor */ "./node_modules/@wangeditor/editor/dist/index.esm.js");
+
+
+function renderFootnote(elem, children, editor) {
+  // Is the current node selected?
+  var selected = _wangeditor_editor__WEBPACK_IMPORTED_MODULE_0__.DomEditor.isNodeSelected(editor, elem);
+  var _elem$number = elem.number,
+    number = _elem$number === void 0 ? null : _elem$number,
+    _elem$value = elem.value,
+    value = _elem$value === void 0 ? null : _elem$value;
+  var vnode = (0,snabbdom__WEBPACK_IMPORTED_MODULE_1__.h)('span', {
+    id: "footnote-link-".concat(number),
+    props: {
+      // href: `#footnote-${id}`,
+      contentEditable: false
+    },
+    attrs: {
+      'data-value': value
+    },
+    style: {
+      marginLeft: '3px',
+      marginRight: '3px',
+      backgroundColor: 'var(--w-e-textarea-slight-bg-color)',
+      border: selected // Selected/unselected, the styles are different
+      ? '2px solid var(--w-e-textarea-selected-border-color)' // wangEditor provided css var https://www.wangeditor.com/v5/theme.html
+      : '2px solid transparent',
+      borderRadius: '3px',
+      padding: '0 3px'
+    }
+  }, "[".concat(number, "]"));
+  return vnode;
+}
+var conf = {
+  type: 'footnote',
+  renderElem: renderFootnote
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (conf);
 
 /***/ }),
 
@@ -2112,6 +2791,33 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _FootnoteModal_vue_vue_type_template_id_77fde3bc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FootnoteModal.vue?vue&type=template&id=77fde3bc */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc");
+/* harmony import */ var _FootnoteModal_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FootnoteModal.vue?vue&type=script&setup=true&lang=js */ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var _var_www_laravel_article_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_var_www_laravel_article_editor_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_FootnoteModal_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_FootnoteModal_vue_vue_type_template_id_77fde3bc__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=script&setup=true&lang=js":
 /*!*****************************************************************************************************!*\
   !*** ./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=script&setup=true&lang=js ***!
@@ -2142,6 +2848,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js":
+/*!********************************************************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js ***!
+  \********************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_FootnoteModal_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_FootnoteModal_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./FootnoteModal.vue?vue&type=script&setup=true&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=script&setup=true&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=template&id=55f09c1a":
 /*!************************************************************************************************!*\
   !*** ./resources/js/site/components/editor/blocks/TextBlock.vue?vue&type=template&id=55f09c1a ***!
@@ -2168,6 +2889,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_MentionModal_vue_vue_type_template_id_582ee921__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_MentionModal_vue_vue_type_template_id_582ee921__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./MentionModal.vue?vue&type=template&id=582ee921 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/MentionModal.vue?vue&type=template&id=582ee921");
+
+
+/***/ }),
+
+/***/ "./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc":
+/*!***************************************************************************************************************************************!*\
+  !*** ./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc ***!
+  \***************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_FootnoteModal_vue_vue_type_template_id_77fde3bc__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_FootnoteModal_vue_vue_type_template_id_77fde3bc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./FootnoteModal.vue?vue&type=template&id=77fde3bc */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/site/components/editor/blocks/text-block-editor-modules/footnote/FootnoteModal.vue?vue&type=template&id=77fde3bc");
 
 
 /***/ }),
