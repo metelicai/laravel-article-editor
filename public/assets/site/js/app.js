@@ -174,11 +174,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     expose();
     var props = __props;
     pdfjs_dist__WEBPACK_IMPORTED_MODULE_0__.GlobalWorkerOptions.workerSrc = (pdfjs_dist_build_pdf_worker_entry__WEBPACK_IMPORTED_MODULE_1___default());
-
-    // const initialized = ref(false)
+    var initialized = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var pagesCount = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(0);
     var currentPage = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(1);
-    var scale = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(2);
+    var scale = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(1);
     var pdf = null;
     (0,vue__WEBPACK_IMPORTED_MODULE_2__.onBeforeMount)( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var loadingTask;
@@ -186,17 +185,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) switch (_context.prev = _context.next) {
           case 0:
             if (!props.pdfUrl) {
-              _context.next = 7;
+              _context.next = 8;
               break;
             }
-            loadingTask = pdfjs_dist__WEBPACK_IMPORTED_MODULE_0__.getDocument(props.pdfUrl);
+            loadingTask = pdfjs_dist__WEBPACK_IMPORTED_MODULE_0__.getDocument({
+              url: props.pdfUrl,
+              httpHeaders: {
+                'X-Requested-With': 'XMLHttpRequest'
+              }
+            });
             _context.next = 4;
             return loadingTask.promise;
           case 4:
             pdf = _context.sent;
+            initialized.value = true;
             pagesCount.value = pdf.numPages;
             getPage();
-          case 7:
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -224,7 +229,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               viewport = page.getViewport({
                 scale: scale.value
               }); // Support HiDPI-screens.
-              outputScale = window.devicePixelRatio || 1; //
+              outputScale = (window.devicePixelRatio || 1) * 2; //
               // Prepare canvas using PDF page dimensions
               //
               canvas = document.getElementById('pdf-canvas');
@@ -233,6 +238,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               canvas.height = Math.floor(viewport.height * outputScale);
               canvas.style.width = Math.floor(viewport.width) + 'px';
               canvas.style.height = Math.floor(viewport.height) + 'px';
+              // canvas.style.width = '100%'
               transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null; //
               // Render PDF page into canvas context
               //
@@ -252,6 +258,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
     var __returned__ = {
       props: props,
+      initialized: initialized,
       pagesCount: pagesCount,
       currentPage: currentPage,
       scale: scale,
@@ -920,8 +927,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  style: {
+    "position": "relative",
+    "width": "max-content"
+  }
+};
+var _hoisted_2 = {
+  style: {
+    "width": "max-content"
+  }
+};
+var _hoisted_3 = {
+  key: 0
+};
+var _hoisted_4 = {
+  key: 0,
+  style: {
+    "position": "absolute",
+    "width": "100%",
+    "height": "100%",
+    "top": "0",
+    "left": "0",
+    "display": "flex",
+    "align-items": "center",
+    "justify-content": "center"
+  }
+};
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  style: {
+    "color": "red"
+  }
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "LOADING")], -1 /* HOISTED */);
+var _hoisted_6 = [_hoisted_5];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("canvas", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("canvas", {
     id: "pdf-canvas",
     style: {
       "border": "1px solid black",
@@ -929,31 +969,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     },
     onClick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {}, ["prevent"])),
     onContextmenu: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {}, ["prevent"]))
-  }, null, 32 /* HYDRATE_EVENTS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 32 /* HYDRATE_EVENTS */), $setup.initialized ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn_primary",
     onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $setup.currentPage--;
+    })
+  }, "-"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("".concat($setup.currentPage, "/").concat($setup.pagesCount)), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn_primary",
+    onClick: _cache[3] || (_cache[3] = function ($event) {
       return $setup.currentPage++;
     })
   }, "+"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn_primary",
-    onClick: _cache[3] || (_cache[3] = function ($event) {
-      return $setup.currentPage--;
-    })
-  }, "-"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "button",
-    "class": "btn btn_primary",
     onClick: _cache[4] || (_cache[4] = function ($event) {
-      return $setup.scale += 0.5;
+      return $setup.scale -= 0.5;
     })
-  }, "scale+"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, "scale-"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.scale), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn_primary",
     onClick: _cache[5] || (_cache[5] = function ($event) {
-      return $setup.scale -= 0.5;
+      return $setup.scale += 0.5;
     })
-  }, "scale-")], 64 /* STABLE_FRAGMENT */);
+  }, "scale+")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), !$setup.initialized ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, _hoisted_6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
