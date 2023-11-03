@@ -29,26 +29,26 @@ function genParser(level) {
 }
 
 export const parseHeader1HtmlConf = {
-	selector: 'h1:not([data-w-e-type])', // data-w-e-type 属性，留给自定义元素，保证扩展性
-	parseElemHtml: genParser,
+	selector: 'h1[data-w-e-type="header1"]',
+	parseElemHtml: genParser(1),
 }
 
 export const parseHeader2HtmlConf = {
-	selector: 'h2:not([data-w-e-type])', // data-w-e-type 属性，留给自定义元素，保证扩展性
-	parseElemHtml: genParser,
+	selector: 'h2[data-w-e-type="header2"]',
+	parseElemHtml: genParser(2),
 }
 
 export const parseHeader3HtmlConf = {
-	selector: 'h3:not([data-w-e-type])', // data-w-e-type 属性，留给自定义元素，保证扩展性
-	parseElemHtml: genParser,
+	selector: 'h3[data-w-e-type="header3"]',
+	parseElemHtml: genParser(3),
 }
 
 export const parseHeader4HtmlConf = {
-	selector: 'h4:not([data-w-e-type])', // data-w-e-type 属性，留给自定义元素，保证扩展性
-	parseElemHtml: genParser,
+	selector: 'h4[data-w-e-type="header4"]',
+	parseElemHtml: genParser(4),
 }
 
 export const parseHeader5HtmlConf = {
-	selector: 'h5:not([data-w-e-type])', // data-w-e-type 属性，留给自定义元素，保证扩展性
-	parseElemHtml: genParser,
+	selector: 'h5[data-w-e-type="header6"]',
+	parseElemHtml: genParser(5),
 }

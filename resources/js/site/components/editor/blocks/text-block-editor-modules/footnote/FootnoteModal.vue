@@ -1,5 +1,5 @@
 <template>
-	<div class="w-e-modal" :style="{ top: top, left: left, width: '300px' }">
+	<div class="w-e-modal" :style="{ top: top, bottom: bottom, left: left, right: right, width: '300px' }">
 		<form @submit.prevent="submitFootnote">
 			<label class="babel-container">
 				<span>{{ t('footnote.valueInputLabel') }}</span>
@@ -42,19 +42,21 @@ onMounted(() => {
 })
 
 const top = ref('')
+const bottom = ref('')
 const left = ref('')
+const right = ref('')
 function setModalPosition() {
-	// Get cursor position
-	const domSelection = document.getSelection()
-	const domRange = domSelection?.getRangeAt(0)
-	if (domRange == null) return
-	const rect = domRange.getBoundingClientRect()
+	const positon = props.editor.getSelectionPosition()
 
 	// Set modal position
-	top.value = `${rect.top + 20}px`
-	left.value = `${rect.left + 5}px`
+	top.value = positon.top || null
+	bottom.value = positon.bottom || null
+	left.value = positon.left || null
+	right.value = positon.right || null
 
-	input.value.focus()
+	input.value.focus({
+		preventScroll: true,
+	})
 }
 
 const selectedFootnote = ref(false)

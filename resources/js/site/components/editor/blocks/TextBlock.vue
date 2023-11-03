@@ -1,15 +1,17 @@
 <template>
 	<div class="editor-block editor-block_text">
-		<div style="border: 1px solid #ccc">
+		<div style="border: 1px solid #ccc" class="editor-container">
 			<Toolbar
 				:editor="editorRef"
 				:defaultConfig="toolbarConfig"
 				mode="default"
+				class="editor-toolbar"
 				style="border-bottom: 1px solid #ccc" />
 			<Editor
 				v-model="_data.content"
 				:defaultConfig="editorConfig"
 				mode="default"
+				class="editor-content"
 				style="min-height: 200px; overflow-y: hidden;"
 				@onCreated="handleCreated"
 				@onChange="handleChange" />
@@ -18,7 +20,7 @@
 				v-model="isShowMentionModal"
 				:editor="editorRef"></MentionModal>
 			<FootnoteModal
-				v-if="isShowFootnoteModal"
+				v-if="props.data.withFootnotes && isShowFootnoteModal"
 				v-model="isShowFootnoteModal"
 				:editor="editorRef"></FootnoteModal>
 		</div>
@@ -41,14 +43,6 @@ import MentionModal from './text-block-editor-modules/MentionModal'
 import FootnoteModal from './text-block-editor-modules/footnote/FootnoteModal'
 import { updateFootnotesNumbers } from './text-block-editor-modules/footnote/helpers'
 
-Boot.registerModule(headerModule)
-Boot.registerModule(textStyleSelectModule)
-Boot.registerModule(leadModule)
-Boot.registerModule(shiftEnterModule)
-Boot.registerModule(footnoteModule)
-Boot.registerModule(mentionModule)
-i18nChangeLanguage('en')
-
 const props = defineProps({
 	id: {
 		type: Number,
@@ -59,6 +53,14 @@ const props = defineProps({
 		required: true,
 	},
 })
+
+Boot.registerModule(headerModule)
+Boot.registerModule(textStyleSelectModule)
+Boot.registerModule(leadModule)
+Boot.registerModule(shiftEnterModule)
+if (props.data.withFootnotes) Boot.registerModule(footnoteModule)
+Boot.registerModule(mentionModule)
+i18nChangeLanguage('en')
 
 const editorRef = shallowRef()
 const _data = ref(props.data)
@@ -71,7 +73,6 @@ const toolbarConfig = {
 		// 'myHeader2',
 		// 'header2',
 		'lead',
-		'insertFootnote',
 		'|',
 		'bold',
 		'italic',
@@ -99,6 +100,8 @@ const toolbarConfig = {
 		},
 		'|',
 		'insertLink',
+		'insertFootnote',
+		'|',
 		'insertTable',
 		'divider',
 		'|',
@@ -152,6 +155,15 @@ const toolbarConfig = {
 		// 'fullScreen',
 	],
 }
+
+// Убираем элемент меню со сносками, если они не включены
+if (!props.data.withFootnotes) {
+	toolbarConfig.toolbarKeys.splice(toolbarConfig.toolbarKeys.indexOf('insertFootnote'), 1)
+}
+
+const isShowMentionModal = ref(false)
+const isShowFootnoteModal = ref(false)
+
 const editorConfig = {
 	placeholder: 'Type here...',
 	MENU_CONF: {
@@ -249,8 +261,11 @@ const editorConfig = {
 	},
 }
 
-const isShowMentionModal = ref(false)
-const isShowFootnoteModal = ref(false)
+// Убираем настройки для сносок, если они не включены
+if (!props.data.withFootnotes) {
+	delete editorConfig.hoverbarKeys.footnote
+	delete editorConfig.EXTEND_CONF.footnoteConfig
+}
 
 onBeforeUnmount(() => {
 	const editor = editorRef.value
@@ -266,12 +281,12 @@ const handleCreated = (editor) => {
 }
 
 const handleChange = (editor) => {
-	// handleFootnotes(editor)
+	if (props.data.withFootnotes) handleFootnotes(editor)
 
 	// const toolbar = DomEditor.getToolbar(editor)
 	// console.log(toolbar.getConfig().toolbarKeys)
 	// console.log(editor.getConfig().hoverbarKeys)
-	// consol.elog(editor.getConfig())
+	// console.log(editor.getConfig())
 }
 
 const lastFootnotesCount = ref(0)
@@ -285,3 +300,15 @@ function handleFootnotes(editor) {
 	lastFootnotesCount.value = footnotesCount
 }
 </script>
+
+<style lang="scss">
+.editor-container {
+	position: relative;
+}
+
+.editor-toolbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+</style>

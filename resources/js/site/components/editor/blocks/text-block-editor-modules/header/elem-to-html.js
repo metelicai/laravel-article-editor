@@ -5,7 +5,9 @@
 
 function genToHtmlFn(level) {
 	function headerToHtml(elem, childrenHtml) {
-		return `<h${level}>${childrenHtml}</h${level}>`
+		// data-custom - для того, чтобы разделить базовые блоки редактора и собственные,
+		// иначе будет конфликт из-за похожих тегов. Способа отключить базовые модули в редакторе не нашел
+		return `<h${level} data-w-e-type="header${level}">${childrenHtml}</h${level}>`
 	}
 	return headerToHtml
 }
