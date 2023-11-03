@@ -6,12 +6,7 @@
 
 @section('page.content')
 
-{{-- <EditorJS></EditorJS> --}}
-{{-- <br> --}}
-<Editor></Editor>
-{{-- <quill-editor></quill-editor> --}}
-{{-- <br> --}}
-{{-- <sun-editor></sun-editor> --}}
+<editor-block></editor-block>
 <br>
 
 {{-- <PDFViewer pdf-url="/pdf/testpdf.pdf"></PDFViewer> --}}

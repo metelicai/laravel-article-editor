@@ -2,12 +2,13 @@
  * @description button menu base
  */
 
+import { t } from '@wangeditor/editor'
 import { Transforms } from 'slate'
 import { DomEditor } from '@wangeditor/core'
 import { matchNode } from '../../helpers'
 
 class LeadButtonMenu {
-	title = 'Lead'
+	title = t('lead.text')
 	type = 'lead'
 	tag = 'button'
 

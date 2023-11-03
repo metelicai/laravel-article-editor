@@ -1,24 +1,20 @@
 <template>
 	<div class="editor-block editor-block_text">
-		<div style="border: 1px solid #ccc" class="editor-container">
+		<div v-if="_data.hasOwnProperty('content')" class="text-editor">
 			<Toolbar
 				:editor="editorRef"
 				:defaultConfig="toolbarConfig"
 				mode="default"
-				class="editor-toolbar"
-				style="border-bottom: 1px solid #ccc" />
+				class="text-editor__toolbar" />
 			<Editor
 				v-model="_data.content"
 				:defaultConfig="editorConfig"
 				mode="default"
-				class="editor-content"
-				style="min-height: 200px; overflow-y: hidden;"
+				class="text-editor__content"
+				style="height: 300px;"
+				ref="textEditorContentComponent"
 				@onCreated="handleCreated"
 				@onChange="handleChange" />
-			<MentionModal
-				v-if="isShowMentionModal"
-				v-model="isShowMentionModal"
-				:editor="editorRef"></MentionModal>
 			<FootnoteModal
 				v-if="props.data.withFootnotes && isShowFootnoteModal"
 				v-model="isShowFootnoteModal"
@@ -28,25 +24,25 @@
 </template>
 
 <script setup>
-import '@wangeditor/editor/dist/css/style.css' // import css
-
-import { onBeforeUnmount, ref, shallowRef } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref, shallowRef } from 'vue'
+import { useConfigStore } from '@/stores/config'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { Boot, i18nChangeLanguage } from '@wangeditor/editor'
+import { Boot, i18nAddResources, i18nChangeLanguage } from '@wangeditor/editor'
+import ru from './text-block-editor-modules/i18n'
 import leadModule from './text-block-editor-modules/lead/index'
 import headerModule from './text-block-editor-modules/header/index'
 import textStyleSelectModule from './text-block-editor-modules/text-style-select/index'
 import shiftEnterModule from './text-block-editor-modules/shift-enter/index'
+
 import footnoteModule from './text-block-editor-modules/footnote/index'
-import mentionModule from './text-block-editor-modules/mention/index'
-import MentionModal from './text-block-editor-modules/MentionModal'
 import FootnoteModal from './text-block-editor-modules/footnote/FootnoteModal'
 import { updateFootnotesNumbers } from './text-block-editor-modules/footnote/helpers'
+
+const configStore = useConfigStore()
 
 const props = defineProps({
 	id: {
 		type: Number,
-		required: true,
 	},
 	data: {
 		type: Object,
@@ -54,25 +50,31 @@ const props = defineProps({
 	},
 })
 
-Boot.registerModule(headerModule)
-Boot.registerModule(textStyleSelectModule)
-Boot.registerModule(leadModule)
-Boot.registerModule(shiftEnterModule)
-if (props.data.withFootnotes) Boot.registerModule(footnoteModule)
-Boot.registerModule(mentionModule)
-i18nChangeLanguage('en')
+// Проверка на подключенные модели. При дестрое компонента они почему-то не теряют регистрацию
+// и при повторной инициализации блока редактор пдает в ошибку
+// (например после перетаскивания блока или удаления какого-либо другого)
+if (Boot.plugins.length < 13) {
+	Boot.registerModule(headerModule)
+	Boot.registerModule(textStyleSelectModule)
+	Boot.registerModule(leadModule)
+	Boot.registerModule(shiftEnterModule)
+	if (props.data.withFootnotes) Boot.registerModule(footnoteModule)
+}
+
+i18nAddResources('ru', ru)
+i18nChangeLanguage('ru')
 
 const editorRef = shallowRef()
+const textEditorContentComponent = ref()
 const _data = ref(props.data)
+const config = computed(() => {
+	return configStore.editorBlocks.text || {}
+})
 const toolbarConfig = {
 	toolbarKeys: [
 		'textStyleSelect',
-		// 'headerSelect',
 		// 'myHeader1',
-		// 'header1',
 		// 'myHeader2',
-		// 'header2',
-		'lead',
 		'|',
 		'bold',
 		'italic',
@@ -81,23 +83,23 @@ const toolbarConfig = {
 		'|',
 		'sup',
 		'sub',
-		'blockquote',
+		// 'blockquote',
 		'|',
-		'color',
-		'bgColor',
+		// 'color',
+		// 'bgColor',
 		'clearStyle',
 		'|',
 		'bulletedList',
 		'numberedList',
-		{
-			key: 'group-indent',
-			title: 'Indent',
-			iconSvg: '<svg viewBox=\'0 0 1024 1024\'><path d=\'M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z\'></path></svg>',
-			menuKeys: [
-				'indent',
-				'delIndent',
-			],
-		},
+		// {
+		// 	key: 'group-indent',
+		// 	title: 'Indent',
+		// 	iconSvg: '<svg viewBox=\'0 0 1024 1024\'><path d=\'M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z\'></path></svg>',
+		// 	menuKeys: [
+		// 		'indent',
+		// 		'delIndent',
+		// 	],
+		// },
 		'|',
 		'insertLink',
 		'insertFootnote',
@@ -161,11 +163,11 @@ if (!props.data.withFootnotes) {
 	toolbarConfig.toolbarKeys.splice(toolbarConfig.toolbarKeys.indexOf('insertFootnote'), 1)
 }
 
-const isShowMentionModal = ref(false)
 const isShowFootnoteModal = ref(false)
 
 const editorConfig = {
-	placeholder: 'Type here...',
+	placeholder: 'Введите текст...',
+	scroll: false,
 	MENU_CONF: {
 		color: {
 			colors: ['#000', '#333', '#666'],
@@ -232,14 +234,14 @@ const editorConfig = {
 		},
 		text: {
 			menuKeys: [
-				'headerSelect',
+				'textStyleSelect',
 				'insertLink',
 				'|',
 				'bold',
 				'italic',
 				'|',
-				'color',
-				'bgColor',
+				// 'color',
+				// 'bgColor',
 				'clearStyle',
 			],
 		},
@@ -250,10 +252,6 @@ const editorConfig = {
 		},
 	},
 	EXTEND_CONF: {
-		mentionConfig: {
-			showModal: () => { isShowMentionModal.value = true },
-			hideModal: () => { isShowMentionModal.value = false },
-		},
 		footnoteConfig: {
 			showModal: () => { isShowFootnoteModal.value = true },
 			hideModal: () => { isShowFootnoteModal.value = false },
@@ -267,6 +265,12 @@ if (!props.data.withFootnotes) {
 	delete editorConfig.EXTEND_CONF.footnoteConfig
 }
 
+onBeforeMount(() => {
+	if (Object.keys(_data.value).length === 0) {
+		_data.value.content = ''
+	}
+})
+
 onBeforeUnmount(() => {
 	const editor = editorRef.value
 	if (editor == null) return
@@ -276,17 +280,15 @@ onBeforeUnmount(() => {
 const handleCreated = (editor) => {
 	editorRef.value = editor
 
-	// console.log(editor.getConfig())
-	// console.log(editor.getAllMenuConfig())
+	// Решение проблемы с варнингом о минимальной высоте в 300px
+	// которое показывается всегда если жестко не задать высоту свойством height.
+	// В инлайновых стилях задана жесткая высота, а здесь применяется класс который ее переопределяет
+	const block = textEditorContentComponent.value.$el
+	block.classList.add('text-editor__content_fix')
 }
 
 const handleChange = (editor) => {
 	if (props.data.withFootnotes) handleFootnotes(editor)
-
-	// const toolbar = DomEditor.getToolbar(editor)
-	// console.log(toolbar.getConfig().toolbarKeys)
-	// console.log(editor.getConfig().hoverbarKeys)
-	// console.log(editor.getConfig())
 }
 
 const lastFootnotesCount = ref(0)
@@ -300,15 +302,3 @@ function handleFootnotes(editor) {
 	lastFootnotesCount.value = footnotesCount
 }
 </script>
-
-<style lang="scss">
-.editor-container {
-	position: relative;
-}
-
-.editor-toolbar {
-	position: sticky;
-	top: 0;
-	z-index: 1;
-}
-</style>

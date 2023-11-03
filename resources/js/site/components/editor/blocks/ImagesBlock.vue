@@ -8,8 +8,7 @@
 			class="images-list"
 			:disabled="pending">
 			<template #item="{ element: image }">
-				<a
-					:href="image.big || image.small || null"
+				<div
 					class="image"
 					:class="{
 						'image_loaded': image.loaded,
@@ -19,24 +18,46 @@
 					<!-- img -->
 					<img
 						v-show="image.loaded"
-						:src="image.preview || image.small"
+						:src="image.preview || ((image.p || image.small || image.dxl) + '?' + Date.now())"
 						:alt="image.alt"
 						class="image__picture"
 						@load="image.loaded = true">
 					<!-- badges & buttons -->
 					<div v-show="image.loaded">
 						<!-- new badge -->
-						<div v-if="image.id === 'new' && !image.deleted" class="image__badge image__badge_new" title="Новое изображение" v-html="iconPlus"></div>
+						<div v-if="image.id === 'new' && !image.deleted" class="image__badge image__badge_new" title="Новое изображение">
+							<i class="ri-add-fill"></i>
+						</div>
 						<!-- deleted badge -->
-						<div v-if="image.deleted" class="image__badge image__badge_deleted" title="Изображение будет удалено" v-html="iconMinus"></div>
+						<div v-if="image.deleted" class="image__badge image__badge_deleted" title="Изображение будет удалено">
+							<i class="ri-subtract-fill"></i>
+						</div>
 						<!-- delete btn -->
-						<div class="image__delete" title="Удалить" @click.prevent="image.deleted = !image.deleted" v-html="iconTrash"></div>
+						<div class="image__delete" title="Удалить" @click.prevent="image.deleted = !image.deleted">
+							<i class="ri-delete-bin-7-fill"></i>
+						</div>
 					</div>
-				</a>
+				</div>
 			</template>
 		</Draggable>
 		<!-- footer -->
 		<div class="images-footer">
+			<!-- add -->
+			<label class="images-add">
+				<input
+					type="file"
+					multiple
+					:accept="config.mimeTypes && config.mimeTypes.length ? config.mimeTypes.join(', ') : ''"
+					class="images-add__input"
+					@change="uploadImages" />
+				<div class="images-add__label">Добавить изображения</div>
+			</label>
+			<!-- limits -->
+			<div class="images-limits">
+				<span v-if="configStore.filesLimits.maxFileSizeString">Максимальный размер: <strong>{{ configStore.filesLimits.maxFileSizeString }}</strong></span>
+				<!-- <span>Максимум одновременно загружаемых файлов: <strong>{{ configStore.filesLimits.maxFiles }}</strong></span> -->
+				<span v-if="config.acceptExts && config.acceptExts.length">Поддерживаются файлы форматов: <strong>{{ config.acceptExts.join(' ') }}</strong></span>
+			</div>
 			<!-- style -->
 			<div class="images-style" title="Стиль отображения блока на странице">
 				<label class="images-style__item">
@@ -58,32 +79,21 @@
 						class="images-style__item-input" />
 				</label>
 			</div>
-			<!-- counter -->
-			<div class="images-counter">0 / 50</div>
-			<!-- add -->
-			<label class="images-add">
-				<input
-					type="file"
-					multiple accept="image/png, image/jpeg"
-					class="images-add__input"
-					@change="uploadImages" />
-				<div class="images-add__label">Добавить изображения</div>
-			</label>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
+import { useConfigStore } from '@/stores/config'
+
 import Draggable from 'vuedraggable'
-import iconTrash from '../svg/trash.svg'
-import iconPlus from '../svg/plus.svg'
-import iconMinus from '../svg/minus.svg'
+
+const configStore = useConfigStore()
 
 const props = defineProps({
 	id: {
 		type: Number,
-		required: true,
 	},
 	data: {
 		type: Object,
@@ -92,7 +102,18 @@ const props = defineProps({
 })
 
 const _data = ref(props.data)
+const config = computed(() => {
+	return configStore.editorBlocks.images || {}
+})
 const pending = ref(false)
+
+onBeforeMount(() => {
+	// Инициализация необходимых параметров блока
+	if (Object.keys(_data.value).length === 0) {
+		_data.value.style = 'gallery'
+		_data.value.images = []
+	}
+})
 
 function uploadImages(event) {
 	const files = { ...event.target.files }
@@ -131,204 +152,3 @@ function getPreview(file) {
 }
 
 </script>
-
-<style lang="scss" scoped>
-$bg-color: #cdd1e0;
-$front-color: #388ae5;
-$border-color: #e8e8eb;
-$error-color: #e76868;
-
-.images-list {
-	display: grid;
-	gap: 10px;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	padding: 10px;
-	background-color: #222222;
-	max-height: 300px;
-	overflow-y: auto;
-
-	.image {
-		position: relative;
-		overflow: hidden;
-		aspect-ratio: 16/9;
-		cursor: move;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		user-select: none;
-		background-color: black;
-		border-radius: 3px;
-		padding: 5px;
-
-		&:not(#{&}_loaded)::after {
-			content: "";
-			position: absolute;
-			z-index: 3;
-			width: 30px;
-			height: 30px;
-			border-radius: 50%;
-			border: 2px solid $bg-color;
-			border-top-color: $front-color;
-			left: 50%;
-			top: 50%;
-			margin-top: -15px;
-			margin-left: -15px;
-			animation: image-preloader-spin 2s infinite linear;
-			box-sizing: border-box;
-		}
-
-		&_new {
-			background-color: $front-color;
-		}
-
-		&_deleted {
-			background-color: $error-color;
-		}
-
-		&__picture {
-			border-radius: 3px;
-			max-width: 100%;
-			width: 100%;
-			height: 100%;
-			vertical-align: middle;
-			margin: auto;
-			-o-object-fit: cover;
-			object-fit: cover;
-			pointer-events: none;
-		}
-
-		&__badge {
-			position: absolute;
-			display: flex;
-			top: 5px;
-			left: 5px;
-			line-height: 1;
-			border-radius: 0 0 3px 0;
-			transition: background-color .1s;
-
-			width: 24px;
-			height: 24px;
-			padding: 2px 4px 4px;
-			fill: #fff;
-
-			&_new {
-				background-color: $front-color;
-			}
-
-			&_deleted {
-				background-color: $error-color;
-			}
-		}
-
-		&__delete {
-			position: absolute;
-			top: 5px;
-			right: 5px;
-			cursor: pointer;
-			color: #fff;
-			font-size: 18px;
-			background-color: rgba(0, 0, 0, .35);
-			line-height: 1;
-			padding: 6px 8px;
-			border-radius: 0 0 0 3px;
-			transition: background-color .1s;
-
-			&:hover {
-				background-color: rgba(0, 0, 0, .5);
-			}
-		}
-	}
-}
-
-.images-footer {
-	display: flex;
-	justify-content: flex-end;
-	gap: 16px;
-	padding: 8px;
-	background-color: black;
-}
-
-.images-style {
-	display: flex;
-	flex-grow: 1;
-
-	&__item {
-		display: block;
-
-		&:first-child input::before {
-			border-radius: 3px 0 0 3px;
-		}
-
-		&:last-child input::before {
-			border-radius: 0 3px 3px 0;
-		}
-
-		input {
-			position: relative;
-			display: flex;
-			appearance: none;
-			outline: none;
-			cursor: pointer;
-			transition: .2s;
-
-			&::before {
-				content: attr(label);
-				display: inline-block;
-				text-align: center;
-				width: 100%;
-				height: 100%;
-				padding: 8px 12px;
-				color: #707684;
-				background-color: white;
-			}
-
-			&:checked {
-				cursor: default;
-
-				&::before {
-					color: white;
-					background-color: $front-color;
-				}
-			}
-		}
-	}
-}
-
-.images-counter {
-	display: flex;
-	align-items: center;
-	color: gray;
-	font-size: 14px;
-}
-
-.images-add {
-	&__input {
-		position: absolute;
-		z-index: -1;
-		opacity: 0;
-		display: block;
-		width: 0;
-		height: 0;
-	}
-
-	&__label {
-		padding: 8px 12px;
-		border-radius: 3px;
-		border: 1px solid rgba(201, 201, 204, .48);
-		font-size: 14px;
-		background: #fff;
-		color: #707684;
-		text-align: center;
-		cursor: pointer;
-	}
-}
-
-@keyframes image-preloader-spin {
-	0% {
-		transform: rotate(0deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-</style>

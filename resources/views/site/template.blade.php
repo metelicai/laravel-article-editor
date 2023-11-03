@@ -12,18 +12,18 @@
 		<link type="text/css" rel="stylesheet" href="{{ mix('css/style.css', 'assets/site') }}">
 
 		{{-- Yandex.Metrika --}}
-		@php($ya_metrika_counter_id = config('services.ya_metrika.counter_id'))
+		{{-- @php($ya_metrika_counter_id = config('services.ya_metrika.counter_id'))
 		@if(env('APP_ENV') == 'production' && $ya_metrika_counter_id)
 			<script id="ya-metrika-init" type="text/javascript" src="{{ mix('js/y.metrika-init.js', 'assets/site') }}" data-counter-id="{{ $ya_metrika_counter_id }}"></script>
 			<noscript><div><img src="{{ 'https://mc.yandex.ru/watch/' . $ya_metrika_counter_id }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-		@endif
+		@endif --}}
 		{{-- /Yandex.Metrika --}}
 	</head>
 
 	<body class="layout">
 		<div id="app">
 			{{-- Шапка --}}
-			@include('site.blocks.header')
+			{{-- @include('site.blocks.header') --}}
 
 			{{-- Контент --}}
 			<main id="main" class="layout__main">
@@ -31,11 +31,11 @@
 			</main>
 
 			{{-- Подвал --}}
-			@include('site.blocks.footer')
+			{{-- @include('site.blocks.footer') --}}
 
 			{{-- Модалки --}}
-			@include('site.blocks.modals.contacts')
-			@include('site.blocks.modals.recall-notice')
+			{{-- @include('site.blocks.modals.contacts') --}}
+			{{-- @include('site.blocks.modals.recall-notice') --}}
 		</div>
 
 		{{-- Скрипты --}}

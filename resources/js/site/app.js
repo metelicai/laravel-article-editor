@@ -14,17 +14,16 @@ import VModal from './components/VModal'
 import VRecall from './components/VRecall'
 import VTabs from './components/tabs/VTabs'
 import VTabsTab from './components/tabs/VTabsTab'
-import Editorjs from './components/Editorjs.vue'
-import QuillEditor from './components/QuillEditor.vue'
-import SunEditor from './components/SunEditor.vue'
-import Editor from './components/editor/Editor.vue'
+import EditorBlock from './blocks/EditorBlock.vue'
 import pdfviewer from './components/PDFViewer.vue'
 
 // vue init
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 const RootComponent = setup()
+const pinia = createPinia()
 const app = createApp(RootComponent)
-app.mount('#app')
+app.use(pinia).mount('#app')
 
 function setup() {
 	return {
@@ -37,20 +36,17 @@ function setup() {
 			VRecall,
 			VTabs,
 			VTabsTab,
-			Editorjs,
-			QuillEditor,
-			SunEditor,
-			Editor,
+			EditorBlock,
 			pdfviewer,
 		},
 		mounted() {
 			// load static js
-			initHeaderJs()
-			initGalleriesJs()
-			initSlidersJs()
-			initValidateTelJs()
-			initRangeJs()
-			initYaMetrikaGoalsJs()
+			// initHeaderJs()
+			// initGalleriesJs()
+			// initSlidersJs()
+			// initValidateTelJs()
+			// initRangeJs()
+			// initYaMetrikaGoalsJs()
 		},
 	}
 }

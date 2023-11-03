@@ -22,6 +22,6 @@ function parseLeadHtml(elem, children, editor) {
 }
 
 export const parseLeadHtmlConf = {
-	selector: 'p.lead:not([data-w-e-type])', // data-w-e-type attribute, reserved for custom elements to ensure scalability
+	selector: 'p[data-w-e-type="lead"',
 	parseElemHtml: parseLeadHtml,
 }

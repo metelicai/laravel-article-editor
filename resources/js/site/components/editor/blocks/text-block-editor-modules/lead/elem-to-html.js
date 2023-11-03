@@ -3,7 +3,7 @@
  */
 
 function leadToHtml(elem, childrenHtml) {
-	return `<p class="lead">${childrenHtml}</p>`
+	return `<p class="lead" data-w-e-type="lead">${childrenHtml}</p>`
 }
 
 export const leadToHtmlConf = {
